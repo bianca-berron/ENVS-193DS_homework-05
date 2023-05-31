@@ -85,7 +85,9 @@ Starting regression here:
 To determine how species and physiological characteristics predict biomass, we fit multiple linear models. 
 
 ```{r null-and-full-models}
+# null = no predictors in model
 null <- lm(totmass ~ 1, data = plant_subset)
+# full = all potential predictors in model
 full <- lm(totmass ~ species + feedlevel + sla + chlorophyll + amass + num_lvs + num_phylls, data = plant_subset)
 ```
 
@@ -104,24 +106,114 @@ We also tested for normality using the Shapiro-Wilk test (null hypothesis: varia
 We tested for homoskedasticity using the Breusch-Pagan test (null hypothesis: variable of interest has constant variance).
 
 ```{r}
+# in writing make sure to say what test is being done for check_normality
 check_normality(full)
 check_heteroscedasticity(full)
 ```
 
-```{r}
+```{r model-logs}
 # log function = natural log
 # transforming data into natural log form to create normality and homoscedasticity
 # when transforming, you're only concerned with the response variable, not the predictors
+null_log <- lm(log(totmass) ~ 1, data = plant_subset)
 full_log <- lm(log(totmass) ~ species + feedlevel + sla + chlorophyll + amass + num_lvs + num_phylls, data = plant_subset)
 
+# assumptions of linear regression are met using log transformation
 plot(full_log)
 check_normality(full_log)
 check_heteroscedasticity(full_log)
 ```
 
+Evaluate multicollinearity:
+
+```{r calculate-vif}
+car::vif(full_log)
+```
+
+We evaluated multicollinearity by calculating generalized variance inflation factor and determined that there is no multicollinearity because the GVIF values were are less than 5, meaning none of the predictors were inflating the R^2 value.
+
+try some more models:
+
+addressing the question: what set of predictor variables best explains the response?
+-maximizes variance but minimizes complexity
+
+```{r}
+model2_log <- lm(log(totmass) ~ species, data = plant_subset)
+```
+
+check assumptions for model 2:
+```{r}
+plot(model2_log)
+
+check_normality(model2_log)
+check_heteroscedasticity(model2_log)
+```
+
+compare models using Akaike's Information cirterion (AIC) values:
+- looks for simplest model that explains the most variance
+- compromise between complexity of model and how well model predicts the response
+
+```{r}
+AICc(full_log)
+AICc(model2_log)
+AICc(null_log)
+
+MuMIn::AICc(full_log, model2_log, null_log)
+MuMIn::model.sel(full_log, model2_log, null_log)
+# full_log has lowest AIC -> best predictor model
+```
+
+we compared models using AIC and chose the model with the lowest value, which was full_log.
+
+# Results
+
+We found that the _____ model including __ ___ __ predictors best predicted ____ (model summary like f-statistic, sample size, DF, etc). 
+
+```{r}
+summary(full_log)
+
+table <- tidy(full_log, conf.int = TRUE) %>% 
+  # change the p-value numbers if they're really small
+  # change the estimates, stan error, and t-statistics to round to __ digits
+  # using mutate
+  # make it into a flextable
+  flextable() %>% 
+  # fit to the viewer
+  autofit()
+
+table
+```
+
+use ggpredict() to backtransform estimates
+```{r}
+model_pred <- ggpredict(full_log, terms = "species", back.transform = TRUE)
+
+plot(model_pred, add.data = TRUE)
+# jittered points are the original data, bars = confidence inteval
+
+plot(ggpredict(full_log, terms = "chlorophyll", back.transform = TRUE), add.data = TRUE)
+
+plot(ggpredict(full_log, terms = "sla", back.transform = TRUE), add.data = TRUE)
+
+model_pred
+# report results on scale of original variable, not log transformation; must be transparent that a log transformation was conducted and why you did it; make sure to emphasize results are on original scale
+# all else held constant (constant = adjusted for values), the predicted biomass for each species are ("predicted" within CI)
+```
+
+
+# different types of ANOVA tables
 
 
 
+
+```{r}
+library(MuMIn)
+```
+
+
+
+
+https://bianca-berron.github.io/ENVS-193DS_homework-05/code/scratch-paper.html 
 
 
 

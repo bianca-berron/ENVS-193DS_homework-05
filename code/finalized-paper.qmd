@@ -1,0 +1,21 @@
+---
+title: "finalized-paper"
+format: html
+editor: visual
+---
+
+## Report
+
+Introduction:
+
+_Sarracenia_ are carnivorous pitcher plants that use their pitcher-shaped leaves to catch arthropod prey for nutrition (https://esajournals.onlinelibrary.wiley.com/doi/full/10.1002/ecs2.2504). Oftentimes, the majority of their diet is made up of spiders, however _Sarracenia_ also feed on insects, mites, mollucks, and occcasionally, even small verterbrates (https://bioone.org/journals/southeastern-naturalist/volume-11/issue-4/058.011.0402/The-Purple-Pitcher-Plant-as-a-Spider-Oviposition-Site/10.1656/058.011.0402.short). This carnivorous pitcher plant has many uses for humans including treatments for type 2 diabetes and tuberculosis-like symptoms (https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9269354/#:~:text=The%20carnivorous%20pitcher%20plant%20Sarracenia%20purpurea%20exhibits%20many%20ethnobotanical%20uses,diabetes%20and%20tuberculosis%2Dlike%20symptoms.). Therefore, understanding what morphological, physiological, or taxonomic characteristics predict biomass may be useful if these pitcher plants began to be used for medical purposes. Moreover, understanding what factors predict pitcher plant biomass can also be helpful to understand how climate change may affect these plants if certain pitcher plant growth biomass factors are depleted. As a result, this statistical analysis revolves around the question of how _Sarracenia_ characteristics predict biomass. We are testing the null hypothesis that _Sarracenia_ characteristics do not predict biomass against the alternative hypothesis that _Sarracenia_ characteristics do predict biomass. 
+
+
+Methods:
+
+The data from the dataset was compiled by conducting an experiment in which two plants of each Sarracenia species (10 Sarracenia species in total) were assigned to one of six feeding levels ranging from 0 - 0.25g of finely ground wasps per feeding (for small species), 0 - 0.5g (for intermediate sized species), and 0 - 1.0g (for large species). The plants were fed once a week for a total of 7 weeks. In addition, aboveground size and photosynthetic rate were measured before treatments started (metadata). To organize these data, the column names were made cleaner using the clean() function and only certain columns were selected (totmass, species, feedlevel, sla, chlorophyll, amass, num_lvs, num_phyll). 
+
+Next, a visualization of the missing data were created, which showed there were missing data in the sla, chlorophyll, amass, num_lvs, and num_phylls column. Therefore, the missing data were dropped from the dataset and a new subset of data was created without the missing data. 
+
+A Pearson's correlation
+
