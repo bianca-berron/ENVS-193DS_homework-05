@@ -149,6 +149,33 @@ check_normality(model2_log)
 check_heteroscedasticity(model2_log)
 ```
 
+model 3!
+```{r}
+model3_log <- lm(log(totmass) ~ chlorophyll, data = plant_subset)
+```
+
+check assumptions for model 3:
+```{r}
+plot(model3_log)
+
+check_normality(model3_log)
+check_heteroscedasticity(model3_log)
+```
+
+model 4:
+```{r}
+model4_log <- lm(log(totmass) ~ feedlevel, data = plant_subset)
+```
+
+check assumptions for model 4:
+```{r}
+plot(model4_log)
+
+check_normality(model4_log)
+check_heteroscedasticity(model4_log)
+```
+
+
 compare models using Akaike's Information cirterion (AIC) values:
 - looks for simplest model that explains the most variance
 - compromise between complexity of model and how well model predicts the response
@@ -157,9 +184,11 @@ compare models using Akaike's Information cirterion (AIC) values:
 AICc(full_log)
 AICc(model2_log)
 AICc(null_log)
+AICc(model3_log)
+AICc(model4_log)
 
-MuMIn::AICc(full_log, model2_log, null_log)
-MuMIn::model.sel(full_log, model2_log, null_log)
+MuMIn::AICc(full_log, model2_log, null_log, model3_log, model4_log)
+MuMIn::model.sel(full_log, model2_log, null_log, model3_log, model4_log)
 # full_log has lowest AIC -> best predictor model
 ```
 
