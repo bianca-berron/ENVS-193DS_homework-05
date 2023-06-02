@@ -1,5 +1,5 @@
 ---
-title: "finalized-paper"
+title: "Sarracenia Analysis"
 format: 
   html: 
     toc: true
@@ -56,6 +56,8 @@ Visualize the missing data:
 ```{r missing-data-visualization}
 gg_miss_var(plant)
 ```
+**Figure 1: Missing Data.** Number of missing data entries on the x-axis and number of variables on the y-axis. Lines correspond to number of missing data values for each variable. 
+
 
 Subsetting data by dropping NAs:
 
@@ -210,10 +212,12 @@ Based on the tests run, we found that the full model including species, feedleve
 
 Works Cited:
 
-https://bioone.org/journals/southeastern-naturalist/volume-11/issue-4/058.011.0402/The-Purple-Pitcher-Plant-as-a-Spider-Oviposition-Site/10.1656/058.011.0402.full
+Ellison, Aaron. and Elizabeth Farnsworth. "Effects of Prey Availability on Sarracenia Physiology at Harvard Forest 2005." Environmental Data Initiative, ver 18, https://doi.org/10.6073/pasta/26b22d09279e62fd729ffc35f9ef0174 (Accessed 2023-06-01).
 
-https://esajournals.onlinelibrary.wiley.com/doi/full/10.1002/ecs2.2504
+Huang, Yen-Hua, et al. “Anticancer and Antioxidant Activities of the Root Extract of the Carnivorous Pitcher Plant Sarracenia Purpurea.” Plants, vol. 11, no. 13, 2022, p. 1668, https://doi.org/10.3390/plants11131668. 
 
-https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9269354/#:\~:text=The%20carnivorous%20pitcher%20plant%20Sarracenia%20purpurea%20exhibits%20many%20ethnobotanical%20uses,diabetes%20and%20tuberculosis%2Dlike%20symptoms.
+Milne, Marc A. “The Purple Pitcher Plant as a Spider Oviposition Site.” Southeastern Naturalist, vol. 11, no. 4, 2012, pp. 567–574, https://doi.org/10.1656/058.011.0402. 
 
-Ellison, A. and E. Farnsworth. 2021. Effects of Prey Availability on Sarracenia Physiology at Harvard Forest 2005 ver 18. Environmental Data Initiative. https://doi.org/10.6073/pasta/26b22d09279e62fd729ffc35f9ef0174 (Accessed 2023-06-01).
+Milne, Marc A., and Deborah A. Waller. “Carnivorous Pitcher Plants Eat a Diet of Certain Spiders, Regardless of What’s on the Menu.” Ecosphere, vol. 9, no. 11, 2018, https://doi.org/10.1002/ecs2.2504. 
+
+

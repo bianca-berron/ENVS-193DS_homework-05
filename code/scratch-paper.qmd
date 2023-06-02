@@ -45,6 +45,9 @@ Visualize the missing data:
 ```{r missing-data-visualization}
 gg_miss_var(plant)
 ```
+**Figure 1: Missing Data.** Number of missing data entries on the x-axis and number of variables on the y-axis. Lines correspond to number of missing data values for each variable. 
+
+
 
 Subsetting data by dropping NAs:
 
