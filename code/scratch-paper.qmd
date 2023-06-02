@@ -26,6 +26,7 @@ library(broom)
 library(corrplot)
 library(AICcmodavg)
 library(GGally)
+library(MuMIn)
 ```
 
 Read in the data:
@@ -146,7 +147,9 @@ check assumptions for model 2:
 plot(model2_log)
 
 check_normality(model2_log)
+# residuals are normally distributed
 check_heteroscedasticity(model2_log)
+# variances appear homoscedastic
 ```
 
 model 3!
@@ -159,7 +162,9 @@ check assumptions for model 3:
 plot(model3_log)
 
 check_normality(model3_log)
+# non normality of residuals detected
 check_heteroscedasticity(model3_log)
+# error variance appears homoscedastic
 ```
 
 model 4:
@@ -172,7 +177,9 @@ check assumptions for model 4:
 plot(model4_log)
 
 check_normality(model4_log)
+# non normality of residuals detected
 check_heteroscedasticity(model4_log)
+# variance appears homoscedastic
 ```
 
 
@@ -228,17 +235,6 @@ model_pred
 # report results on scale of original variable, not log transformation; must be transparent that a log transformation was conducted and why you did it; make sure to emphasize results are on original scale
 # all else held constant (constant = adjusted for values), the predicted biomass for each species are ("predicted" within CI)
 ```
-
-
-# different types of ANOVA tables
-
-
-
-
-```{r}
-library(MuMIn)
-```
-
 
 
 

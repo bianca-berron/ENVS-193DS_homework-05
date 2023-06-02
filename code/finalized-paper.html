@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.475">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>finalized-paper</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="finalized-paper_files/libs/clipboard/clipboard.min.js"></script>
+<script src="finalized-paper_files/libs/quarto-html/quarto.js"></script>
+<script src="finalized-paper_files/libs/quarto-html/popper.min.js"></script>
+<script src="finalized-paper_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="finalized-paper_files/libs/quarto-html/anchor.min.js"></script>
+<link href="finalized-paper_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="finalized-paper_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="finalized-paper_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="finalized-paper_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="finalized-paper_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article toc-left">
+<div id="quarto-sidebar-toc-left" class="sidebar toc-left">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#report" id="toc-report" class="nav-link active" data-scroll-target="#report">Report</a></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction">Introduction:</a></li>
+  <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods">Methods:</a></li>
+  <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a></li>
+  </ul>
+</nav>
+</div>
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">finalized-paper</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="report" class="level2">
+<h2 class="anchored" data-anchor-id="report">Report</h2>
+</section>
+<section id="introduction" class="level1">
+<h1>Introduction:</h1>
+<p><em>Sarracenia</em> are carnivorous pitcher plants that use their pitcher-shaped leaves to catch arthropod prey for nutrition (Milne and Waller 1). Oftentimes, the majority of their diet is made up of spiders, however <em>Sarracenia</em> also feed on insects, mites, mollucks, and occcasionally, even small verterbrates (Milne 1). This carnivorous pitcher plant has many uses for humans including treatments for type 2 diabetes and tuberculosis-like symptoms (Huang et al.&nbsp;1). Therefore, understanding what morphological, physiological, or taxonomic characteristics predict biomass may be useful if these pitcher plants began to be used for medical purposes. Moreover, understanding what factors predict pitcher plant biomass can also be helpful to understand how climate change may affect these plants if certain pitcher plant growth biomass factors are depleted. As a result, this statistical analysis revolves around the question of how <em>Sarracenia</em> characteristics predict biomass. We are testing the null hypothesis that <em>Sarracenia</em> characteristics do not predict biomass against the alternative hypothesis that <em>Sarracenia</em> characteristics do predict biomass.</p>
+</section>
+<section id="methods" class="level1">
+<h1>Methods:</h1>
+<p>The data from the dataset was compiled by conducting an experiment in which two plants of each Sarracenia species (10 Sarracenia species in total) were assigned to one of six feeding levels ranging from 0 - 0.25g of finely ground wasps per feeding (for small species), 0 - 0.5g for intermediate sized species, and 0 - 1.0g for large species (Ellison and Farnsworth). The plants were fed once a week for a total of 7 weeks. In addition, aboveground size and photosynthetic rate were measured before treatments started (metadata). To organize these data, the column names were made cleaner using the clean() function and only certain columns were selected (totmass, species, feedlevel, sla, chlorophyll, amass, num_lvs, num_phyll).</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(janitor)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggeffects)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(performance)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(naniar) <span class="co"># or equivalent</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(flextable) <span class="co"># or equivalent</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(car)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># would be nice to have</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(corrplot)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(AICcmodavg)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(GGally)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MuMIn)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Read in the data:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>plant <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"knb-lter-hfr.109.18 (1)"</span>, <span class="st">"hf109-01-sarracenia.csv"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># make column names cleaner</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">clean_names</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># selecting columns of interest </span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(totmass, species, feedlevel, sla, chlorophyll, amass, num_lvs, num_phylls)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Next, a visualization of the missing data were created, which showed there were missing data in the sla, chlorophyll, amass, num_lvs, and num_phylls column. Therefore, the missing data were dropped from the dataset and a new subset of data was created without the missing data.</p>
+<p>To determine the Pearson’s correlation between variables, we calculated Pearson’s r and visually represented correlation using a correlation plot. Pearson’s r was calculated by computing the covariances, or correlations, between two variables (such as species versus biomass or chlorophyll versus number of pitcher plants) which was done by taking the covariance of the two variables and dividing them by the product of their standard deviations. This was done for every pair of variables, so that each variable was compared to itself as well as each variable measured.</p>
+<p>To determine the relationships between variables, a pairs plot was created, comparing each variable to itself and every variable measured. The results were formatted into several visualizations that showed the relationships between them.</p>
+<p>In addition, to determine how species and physiological characteristics predict biomass, we fit multiple linear models. The null model did not include any predictors in the model, while the full model included all predictors in the model. We visually assessed the normality and homoskedasticity of residuals using diagnostic plots for the full model. We also tested for normality using the Shapiro-Wilk test and tested for for homoskedasticity using the Breusch-Pagan test. For the original data, this resulted in non-normality and heteroscedasticity in the residuals, therefore, the data was transformed into its natural log form to create normality and homoscedasticity in the residuals (only the response variable was transformed, not the predictors). The same tests were run for normality and homoscedasticity using the transformed data and the assumptions for the full model were met.</p>
+<p>In addition to the full and null models, three additional models were created to determine how species and certain physiological characteristics predict biomass. The first additional model created explored how species predicted total biomass because oftentimes, varying species will have different characteristics resulting in differing biomasses. The second additional model created explored how chlorophyll affects total biomass. Although the normality assumption was not met, I still chose to use this model as chlorophyll allows plants to undergo photosynthesis, which allows plants to create sugar, promoting plant growth. Therefore, chlorophyll could directly affect a pitcher plant’s total biomass. The third model created explored how feedlevel affects total biomass. Once again, although the normality assumption was not met, I still used this model because if a plant has access to more food, then the plant would likely have a larger biomass.</p>
+<p>A model comparison between all of these models was created using Akaike’s Information criterion (AIC) values. We looked for the simplest model that explains the most variance, which is essentially a compromise between complexity of model and how well model predicts the response. We compared models using AIC and chose the model with the lowest value, which was full_log.</p>
+<p>Next, a variance inflation factor check looking for multicollinearity was run for the full model to determine if there were any variances inflating the R^2 values. We evaluated multicollinearity by calculating generalized variance inflation factors and determined that there is no multicollinearity because the GVIF values were are less than 5, meaning none of the predictors were inflating the R^2 value.</p>
+</section>
+<section id="results" class="level1">
+<h1>Results</h1>
+<p>Based on the tests run, we found that the full model including species, feedlevel, sla, chlorophyll, amass, num_lvs, and num_phylls predictors best predicted total biomass of pitcher plants (F = 38.38 on 15 and 87 DF, R^2 = 0.85, p &lt; 0.001, n = 103, α = 0.05).</p>
+<p>Works Cited:</p>
+<p>https://bioone.org/journals/southeastern-naturalist/volume-11/issue-4/058.011.0402/The-Purple-Pitcher-Plant-as-a-Spider-Oviposition-Site/10.1656/058.011.0402.full</p>
+<p>https://esajournals.onlinelibrary.wiley.com/doi/full/10.1002/ecs2.2504</p>
+<p>https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9269354/#:~:text=The%20carnivorous%20pitcher%20plant%20Sarracenia%20purpurea%20exhibits%20many%20ethnobotanical%20uses,diabetes%20and%20tuberculosis%2Dlike%20symptoms.</p>
+<p>Ellison, A. and E. Farnsworth. 2021. Effects of Prey Availability on Sarracenia Physiology at Harvard Forest 2005 ver 18. Environmental Data Initiative. https://doi.org/10.6073/pasta/26b22d09279e62fd729ffc35f9ef0174 (Accessed 2023-06-01).</p>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

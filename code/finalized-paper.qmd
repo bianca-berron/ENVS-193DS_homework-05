@@ -1,34 +1,219 @@
 ---
 title: "finalized-paper"
-format: html
+format: 
+  html: 
+    toc: true
+    toc-location: left
+    code-fold: true
+    theme: yeti
 editor: visual
+execute: 
+  message: false
+  warning: false
 ---
 
 ## Report
 
-Introduction:
+# Introduction
 
-_Sarracenia_ are carnivorous pitcher plants that use their pitcher-shaped leaves to catch arthropod prey for nutrition (Milne and Waller 1). Oftentimes, the majority of their diet is made up of spiders, however _Sarracenia_ also feed on insects, mites, mollucks, and occcasionally, even small verterbrates (Milne 1). This carnivorous pitcher plant has many uses for humans including treatments for type 2 diabetes and tuberculosis-like symptoms (Huang et al. 1). Therefore, understanding what morphological, physiological, or taxonomic characteristics predict biomass may be useful if these pitcher plants began to be used for medical purposes. Moreover, understanding what factors predict pitcher plant biomass can also be helpful to understand how climate change may affect these plants if certain pitcher plant growth biomass factors are depleted. As a result, this statistical analysis revolves around the question of how _Sarracenia_ characteristics predict biomass. We are testing the null hypothesis that _Sarracenia_ characteristics do not predict biomass against the alternative hypothesis that _Sarracenia_ characteristics do predict biomass. 
+*Sarracenia* are carnivorous pitcher plants that use their pitcher-shaped leaves to catch arthropod prey for nutrition (Milne and Waller 1). Oftentimes, the majority of their diet is made up of spiders, however *Sarracenia* also feed on insects, mites, mollucks, and occcasionally, even small verterbrates (Milne 1). This carnivorous pitcher plant has many uses for humans including treatments for type 2 diabetes and tuberculosis-like symptoms (Huang et al. 1). Therefore, understanding what morphological, physiological, or taxonomic characteristics predict biomass may be useful if these pitcher plants began to be used for medical purposes. Moreover, understanding what factors predict pitcher plant biomass can also be helpful to understand how climate change may affect these plants if certain pitcher plant growth biomass factors are depleted. As a result, this statistical analysis revolves around the question of how *Sarracenia* characteristics predict biomass. We are testing the null hypothesis that *Sarracenia* characteristics do not predict biomass against the alternative hypothesis that *Sarracenia* characteristics do predict biomass.
+
+# Methods
+
+The data from the dataset was compiled by conducting an experiment in which two plants of each Sarracenia species (10 Sarracenia species in total) were assigned to one of six feeding levels ranging from 0 - 0.25g of finely ground wasps per feeding (for small species), 0 - 0.5g for intermediate sized species, and 0 - 1.0g for large species (Ellison and Farnsworth). The plants were fed once a week for a total of 7 weeks. In addition, aboveground size and photosynthetic rate were measured before treatments started (metadata). To organize these data, the column names were made cleaner using the clean() function and only certain columns were selected (totmass, species, feedlevel, sla, chlorophyll, amass, num_lvs, num_phyll).
+
+```{r libraries}
+library(tidyverse)
+library(here)
+library(janitor)
+library(ggeffects)
+library(performance)
+library(naniar) # or equivalent
+library(flextable) # or equivalent
+library(car)
+library(broom)
+# would be nice to have
+library(corrplot)
+library(AICcmodavg)
+library(GGally)
+library(MuMIn)
+```
+
+Read in the data:
+
+```{r reading-data}
+plant <- read_csv(here("data", "knb-lter-hfr.109.18 (1)", "hf109-01-sarracenia.csv")) %>% 
+  # make column names cleaner
+  clean_names() %>% 
+  # selecting columns of interest 
+  select(totmass, species, feedlevel, sla, chlorophyll, amass, num_lvs, num_phylls)
+```
+
+Next, a visualization of the missing data were created, which showed there were missing data in the sla, chlorophyll, amass, num_lvs, and num_phylls column. Therefore, the missing data were dropped from the dataset and a new subset of data was created without the missing data.
+
+Visualize the missing data:
+
+```{r missing-data-visualization}
+gg_miss_var(plant)
+```
+
+Subsetting data by dropping NAs:
+
+```{r subset-drop-NA}
+plant_subset <- plant %>% 
+  drop_na(sla, chlorophyll, amass, num_lvs, num_phylls)
+```
+
+To determine the Pearson's correlation between variables, we calculated Pearson's r and visually represented correlation using a correlation plot. Pearson's r was calculated by computing the covariances, or correlations, between two variables (such as species versus biomass or chlorophyll versus number of pitcher plants) which was done by taking the covariance of the two variables and dividing them by the product of their standard deviations. This was done for every pair of variables, so that each variable was compared to itself as well as each variable measured.
+
+```{r correlation-plot}
+# calculate Pearson's r for numerical values only
+plant_cor <- plant_subset %>% 
+  select(feedlevel:num_phylls) %>% 
+  # diagonals show correlation between variables and themselves = 1
+  cor(method = "pearson")
+  
+# creating a correlation plot (visual representation of correlation matrix); larger shapes mean greater correlation; color represents direction
+corrplot(plant_cor,
+         # change the shape of what's in the cells
+         method = "ellipse", 
+         # add correlation coefficients into plot
+         addCoef.col = "black"
+         )  
+```
 
 
-Methods:
+Moreover, to determine the relationships between variables, a pairs plot was created, comparing each variable to itself and every variable measured. The results were formatted into several visualizations that showed the relationships between them.
 
-The data from the dataset was compiled by conducting an experiment in which two plants of each Sarracenia species (10 Sarracenia species in total) were assigned to one of six feeding levels ranging from 0 - 0.25g of finely ground wasps per feeding (for small species), 0 - 0.5g for intermediate sized species, and 0 - 1.0g for large species (Ellison and Farnsworth). The plants were fed once a week for a total of 7 weeks. In addition, aboveground size and photosynthetic rate were measured before treatments started (metadata). To organize these data, the column names were made cleaner using the clean() function and only certain columns were selected (totmass, species, feedlevel, sla, chlorophyll, amass, num_lvs, num_phyll). 
+Create a plot of each variable compared against the others
+```{r pairs-plot}
+plant_subset %>% 
+  select(species:num_phylls) %>% 
+  ggpairs()
+```
 
-Next, a visualization of the missing data were created, which showed there were missing data in the sla, chlorophyll, amass, num_lvs, and num_phylls column. Therefore, the missing data were dropped from the dataset and a new subset of data was created without the missing data. 
 
-To determine the Pearson's correlation between variables, we calculated Pearson's r and visually represented correlation using a correlation plot. Pearson's r was calculated by computing the covariances, or correlations, between two variables (such as species versus biomass or chlorophyll versus number of pitcher plants) which was done by taking the covariance of the two variables and dividing them by the product of their standard deviations. This was done for every pair of variables, so that each variable was compared to itself as well as each variable measured.  
+In addition, to determine how species and physiological characteristics predict biomass, we fit multiple linear models. The null model did not include any predictors in the model, while the full model included all predictors in the model. 
 
-To determine the relationships between variables, a pairs plot was created, comparing each variable to itself and every variable measured. The results were formatted into several visualizations that showed the relationships between them. 
+```{r null-and-full-models}
+# null = no predictors in model
+null <- lm(totmass ~ 1, data = plant_subset)
+# full = all potential predictors in model
+full <- lm(totmass ~ species + feedlevel + sla + chlorophyll + amass + num_lvs + num_phylls, data = plant_subset)
+```
 
-In addition, to determine how species and physiological characteristics predict biomass, we fit multiple linear models. The null model did not include any predictors in the model, while the full model included all predictors in the model. We visually assessed the normality and homoskedasticity of residuals using diagnostic plots for the full model. We also tested for normality using the Shapiro-Wilk test and tested for for homoskedasticity using the Breusch-Pagan test. For the original data, this resulted in non-normality and heteroscedasticity in the residuals, therefore, the data was transformed into its natural log form to create normality and homoscedasticity in the residuals (only the response variable was transformed, not the predictors). The same tests were run for normality and homoscedasticity using the transformed data and the assumptions for the full model were met. 
+We visually assessed the normality and homoskedasticity of residuals using diagnostic plots for the full model. 
+
+```{r full-diagnostics}
+par(mfrow = c(2, 2))
+plot(full)
+```
+
+We also tested for normality using the Shapiro-Wilk test and tested for for homoskedasticity using the Breusch-Pagan test. 
+
+```{r}
+check_normality(full)
+check_heteroscedasticity(full)
+```
+
+For the original data, this resulted in non-normality and heteroscedasticity in the residuals, therefore, the data was transformed into its natural log form to create normality and homoscedasticity in the residuals (only the response variable was transformed, not the predictors). The same tests were run for normality and homoscedasticity using the transformed data and the assumptions for the full model were met. 
+
+```{r model-logs}
+# log function = natural log
+# transforming data into natural log form to create normality and homoscedasticity
+# when transforming, you're only concerned with the response variable, not the predictors
+null_log <- lm(log(totmass) ~ 1, data = plant_subset)
+full_log <- lm(log(totmass) ~ species + feedlevel + sla + chlorophyll + amass + num_lvs + num_phylls, data = plant_subset)
+
+# assumptions of linear regression are met using log transformation
+plot(full_log)
+check_normality(full_log)
+check_heteroscedasticity(full_log)
+```
+
+
+In addition to the full and null models, three additional models were created to determine how species and certain physiological characteristics predict biomass. The first additional model created explored how species predicted total biomass because oftentimes, varying species will have different characteristics resulting in differing biomasses. The assumptions (normality and homoscedasticity) were met. 
+
+model 2:
+```{r}
+model2_log <- lm(log(totmass) ~ species, data = plant_subset)
+```
+
+check assumptions for model 2:
+```{r}
+plot(model2_log)
+
+check_normality(model2_log)
+# residuals are normally distributed
+check_heteroscedasticity(model2_log)
+# variances appear homoscedastic
+```
+
+The second additional model created explored how chlorophyll affects total biomass. Although the normality assumption was not met, I still chose to use this model as chlorophyll allows plants to undergo photosynthesis, which allows plants to create sugar, promoting plant growth. Therefore, chlorophyll could directly affect a pitcher plant's total biomass. 
+
+model 3:
+```{r}
+model3_log <- lm(log(totmass) ~ chlorophyll, data = plant_subset)
+```
+
+check assumptions for model 3:
+```{r}
+plot(model3_log)
+
+check_normality(model3_log)
+# non normality of residuals detected
+check_heteroscedasticity(model3_log)
+# error variance appears homoscedastic
+```
+
+The third model created explored how feedlevel affects total biomass. Once again, although the normality assumption was not met, I still used this model because if a plant has access to more food, then the plant would likely have a larger biomass.
+
+model 4:
+```{r}
+model4_log <- lm(log(totmass) ~ feedlevel, data = plant_subset)
+```
+
+check assumptions for model 4:
+```{r}
+plot(model4_log)
+
+check_normality(model4_log)
+# non normality of residuals detected
+check_heteroscedasticity(model4_log)
+# variance appears homoscedastic
+```
+
+A model comparison between all of these models was created using Akaike's Information criterion (AIC) values. We looked for the simplest model that explains the most variance, which is essentially a compromise between complexity of model and how well model predicts the response. We compared models using AIC and chose the model with the lowest value, which was full_log.
+
+```{r}
+AICc(full_log)
+AICc(model2_log)
+AICc(null_log)
+AICc(model3_log)
+AICc(model4_log)
+
+MuMIn::AICc(full_log, model2_log, null_log, model3_log, model4_log)
+MuMIn::model.sel(full_log, model2_log, null_log, model3_log, model4_log)
+# full_log has lowest AIC -> best predictor model
+```
+
+Next, a variance inflation factor check looking for multicollinearity was run for the full model to determine if there were any variances inflating the R^2 values. We evaluated multicollinearity by calculating generalized variance inflation factors and determined that there is no multicollinearity because the GVIF values were are less than 5, meaning none of the predictors were inflating the R^2 value.
+
+```{r calculate-vif}
+car::vif(full_log)
+```
+
+# Results
+
+Based on the tests run, we found that the full model including species, feedlevel, sla, chlorophyll, amass, num_lvs, and num_phylls predictors best predicted total biomass of pitcher plants (F = 38.38 on 15 and 87 DF, R^2 = 0.85, p < 0.001, n = 103, α = 0.05). 
+
 
 Works Cited:
 
-https://bioone.org/journals/southeastern-naturalist/volume-11/issue-4/058.011.0402/The-Purple-Pitcher-Plant-as-a-Spider-Oviposition-Site/10.1656/058.011.0402.full 
+https://bioone.org/journals/southeastern-naturalist/volume-11/issue-4/058.011.0402/The-Purple-Pitcher-Plant-as-a-Spider-Oviposition-Site/10.1656/058.011.0402.full
 
 https://esajournals.onlinelibrary.wiley.com/doi/full/10.1002/ecs2.2504
 
-https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9269354/#:~:text=The%20carnivorous%20pitcher%20plant%20Sarracenia%20purpurea%20exhibits%20many%20ethnobotanical%20uses,diabetes%20and%20tuberculosis%2Dlike%20symptoms.
+https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9269354/#:\~:text=The%20carnivorous%20pitcher%20plant%20Sarracenia%20purpurea%20exhibits%20many%20ethnobotanical%20uses,diabetes%20and%20tuberculosis%2Dlike%20symptoms.
 
 Ellison, A. and E. Farnsworth. 2021. Effects of Prey Availability on Sarracenia Physiology at Harvard Forest 2005 ver 18. Environmental Data Initiative. https://doi.org/10.6073/pasta/26b22d09279e62fd729ffc35f9ef0174 (Accessed 2023-06-01).
