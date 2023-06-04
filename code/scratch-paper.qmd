@@ -228,7 +228,7 @@ use ggpredict() to backtransform estimates
 model_pred <- ggpredict(full_log, terms = "species", back.transform = TRUE)
 
 plot(model_pred, add.data = TRUE)
-# jittered points are the original data, bars = confidence inteval
+# jittered points are the original data, bars = confidence interval
 
 plot(ggpredict(full_log, terms = "chlorophyll", back.transform = TRUE), add.data = TRUE)
 
