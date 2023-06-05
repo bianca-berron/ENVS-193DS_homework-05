@@ -28,11 +28,11 @@ library(here)
 library(janitor)
 library(ggeffects)
 library(performance)
-library(naniar) # or equivalent
-library(flextable) # or equivalent
+library(naniar)
+library(flextable)
 library(car)
 library(broom)
-# would be nice to have
+library(ggplot2)
 library(corrplot)
 library(AICcmodavg)
 library(GGally)
@@ -56,7 +56,7 @@ Visualize the missing data:
 ```{r missing-data-visualization}
 gg_miss_var(plant)
 ```
-**Figure 1: Missing Data.** Number of missing data entries on the x-axis and number of variables on the y-axis. Lines correspond to number of missing data values for each variable. 
+**Figure 1: Missing Data.** Number of missing data entries on the x-axis and variables on the y-axis. Lines correspond to number of missing data values for each variable. 
 
 
 Subsetting data by dropping NAs:
@@ -87,12 +87,14 @@ Moreover, to determine the relationships between variables, a pairs plot was cre
 
 ```{r pairs-plot}
 plant_subset %>% 
+  # select all columns between species and num_phylls
   select(species:num_phylls) %>% 
+  # create pairs plot
   ggpairs()
 ```
-**Figure 3. Pairs Plot.** Variables of interest are listed on both x and y axes. 
+**Figure 3. Pairs Plot.** Variables of interest are listed on both x and y axes. Boxes along diagonals display density plot for each variable while boxes in lower left show scatterplot between each pair of variables. Numerical values in boxes display the Pearson Correlation coefficient between each variable. 
 
-In addition, to determine how species and physiological characteristics predict biomass, we fit multiple linear models. The null model did not include any predictors in the model, while the full model included all predictors in the model. 
+In addition, to determine how species and physiological characteristics predict biomass, we fit multiple linear models. The null model did not include any predictors in the model, while the full model included all predictors in the model (species, feedlevel, sla, chlorophyll, amass, num_lvs, num_phylls). 
 
 ```{r null-and-full-models}
 # null = no predictors in model
@@ -104,6 +106,7 @@ full <- lm(totmass ~ species + feedlevel + sla + chlorophyll + amass + num_lvs +
 We visually assessed the normality and homoskedasticity of residuals using diagnostic plots for the full model. 
 
 ```{r full-diagnostics}
+# plot in 2x2 table
 par(mfrow = c(2, 2))
 plot(full)
 ```
@@ -123,11 +126,13 @@ For the original data, this resulted in non-normality and heteroscedasticity in 
 null_log <- lm(log(totmass) ~ 1, data = plant_subset)
 full_log <- lm(log(totmass) ~ species + feedlevel + sla + chlorophyll + amass + num_lvs + num_phylls, data = plant_subset)
 
-# assumptions of linear regression are met using log transformation
+# plot in 2x2 table
 par(mfrow = c(2, 2))
 plot(full_log)
+
 check_normality(full_log)
 check_heteroscedasticity(full_log)
+# assumptions of linear regression are met using log transformation
 ```
 
 
@@ -185,21 +190,22 @@ check_heteroscedasticity(model4_log)
 # variance appears homoscedastic
 ```
 
-A model comparison between all of these models was created using Akaike's Information criterion (AIC) values. We looked for the simplest model that explains the most variance, which is essentially a compromise between complexity of model and how well model predicts the response. We compared models using AIC and chose the model with the lowest value, which was full_log.
+A model comparison between all of these models was created using Akaike's Information Criterion (AIC) values. We looked for the simplest model that explains the most variance, which is essentially a compromise between the complexity of a model and how well a model predicts the response. We compared models using AIC and chose the model with the lowest value, which was full_log.
 
 ```{r}
+# determine AIC values for each model
 AICc(full_log)
 AICc(model2_log)
 AICc(null_log)
 AICc(model3_log)
 AICc(model4_log)
 
-MuMIn::AICc(full_log, model2_log, null_log, model3_log, model4_log)
+# place AIC values in a table to determine model with lowest AIC
 MuMIn::model.sel(full_log, model2_log, null_log, model3_log, model4_log)
 # full_log has lowest AIC -> best predictor model
 ```
 
-Next, a variance inflation factor check looking for multicollinearity was run for the full model to determine if there were any variances inflating the R ^ 2 values. We evaluated multicollinearity by calculating generalized variance inflation factors and determined that there is no multicollinearity because the GVIF values were are less than 5, meaning none of the predictors were inflating the R ^ 2 value.
+Next, a variance inflation factor check looking for multicollinearity was run for the full model to determine if there were any variances inflating the $R^2$ values. We evaluated multicollinearity by calculating generalized variance inflation factors and determined that there is no multicollinearity because the GVIF values were are less than 5, meaning none of the predictors were inflating the $R^2$ value.
 
 ```{r calculate-vif}
 car::vif(full_log)
@@ -207,18 +213,20 @@ car::vif(full_log)
 
 # Results
 
-Based on the tests run, we found that the full model including species, feedlevel, sla, chlorophyll, amass, num_lvs, and num_phylls predictors best predicted total biomass of pitcher plants (F = 38.38 on 15 and 87 DF, R ^ 2 = 0.85, p < 0.001, n = 103, α = 0.05). This model was chosen as it had the lowest AIC value, which means the full model was the simplest model that explained the most variance. 
+Based on the tests run, we found that the full model including species, feedlevel, sla, chlorophyll, amass, num_lvs, and num_phylls predictors best predicted total biomass of pitcher plants ($F_{15, 87}$ = 38.38, $R^2$ = 0.85, p < 0.001, n = 103, α = 0.05). This model was chosen as it had the lowest AIC value, which means the full model was the simplest model that explained the most variance. 
 
 ```{r}
 summary(full_log)
 
 table <- tidy(full_log, conf.int = TRUE) %>% 
+    mutate(p.value = round(p.value, 3)) %>% 
+    # make p.value a character to adjust column to show rounded values and p-values less than 0.001
     mutate(p.value = case_when(
-    p.value < 0.001 ~ "< 0.001"
+    p.value < 0.001 ~ "< 0.001", TRUE ~ as.character(p.value)  
   )) %>% 
-    # change the estimates, stan error, and t-statistics to round to 2 digits
+    # change the estimates, stan error, confidence intervals and t-statistics to round to 3 digits
   # using mutate
-    mutate(across(c("estimate", "std.error", "statistic", "conf.low", "conf.high"), round, 2)) %>% 
+    mutate(across(c("estimate", "std.error", "statistic", "conf.low", "conf.high"), round, 3)) %>% 
   # make it into a flextable
   flextable() %>% 
     # edit labels
@@ -235,27 +243,48 @@ table <- tidy(full_log, conf.int = TRUE) %>%
 table
 ```
 
-In addition, what the full model does it that it takes all the predictors and fits them into a model to determine the predicted biomass of the pitcher plants. Below is a visualization of model predictions for biomass as function of chlorophyll. 
+Essentially, the full model takes all the predictors and fits them into a model to determine the predicted biomass of the pitcher plants. Below is a visualization of how one of those predictors (chlorophyll) may predict the biomass of pitcher plants. 
 
 
 ```{r}
-plot(ggpredict(full_log, terms = "chlorophyll", back.transform = TRUE), add.data = TRUE)
-```
-**Figure 4. Model Prediction for biomass as a function of chlorophyll.** Black line represents predicted biomass of pitcher plants based on chlorophyll. Shaded gray area represents 95% confidence interval for predicted biomass. Jittered points are original data. 
+# create new object to show predicted biomass of pitcher plants based on chlorophyll by species
+chlorophyll_predictions <- ggpredict(full_log, terms = c("chlorophyll", "species"), back.transform = TRUE) %>% 
+  rename("species" = "group")
 
-It is important to note that these results are reported on the scale of the original variable, not the log transformation. With that said, this model says that all else constant, a chlorophyll content of 410 mg/g will result in a predicted biomass of 6.47 g predicted within a confidence interval of 4.95g - 8.45g. This logic can be applied to any chlorophyll content level and the predicted biomass for each level of chlorophyll can be seen below.
+ggplot(data = plant_subset, aes(x = chlorophyll, y = totmass)) +
+  # create scatterplot with different colored points for each species
+  geom_jitter(aes(color = species)) +
+  # add a line showing predicted biomass based on chlorophyll content for each species
+  geom_line(data = chlorophyll_predictions, aes(x = x, y = predicted, color = species)) +
+  # insert confidence interval for each species based on chlorophyll_predictions
+  geom_ribbon (data = chlorophyll_predictions, aes(x = x, y = predicted, fill = species, ymin = conf.low, ymax = conf.high), alpha = 0.2) +
+  # change axis titles to be meaningful
+  labs (x = "Chlorophyll (mg/g)", y = "Total Biomass (g)", title = "Predicted Values of Pitcher Plant Biomass By Species") +
+  theme_bw() + 
+  theme(
+    # edit font and font color of the plot
+    axis.title = element_text(family = "Times New Roman", color = "black"),
+    plot.title = element_text(family = "Times New Roman", color = "black"),
+    axis.text = element_text(family = "Times New Roman", color = "black"),
+    legend.text = element_text(family = "Times New Roman", color = "black"),
+    legend.title = element_text(family = "Times New Roman", color = "black")
+    )
+```
+**Figure 4. Model Prediction for Biomass as a Function of Chlorophyll by Species.** Solid lines represent predicted biomass of pitcher plants based on chlorophyll level for each species. Highlighted areas represents 95% confidence interval for predicted biomass for each speices. Jittered points are original data. 
+
+It is important to note that these results are reported on the scale of the original variable, not the log transformation. With that said, this model says that all else constant, an increase in chlorophyll level corresponds to an increase in total biomass for certain species (leucophylla, flava, alata, rubra, minor, and jonesii) as seen in the upward sloping lines in the figure, but does not appear to affect total biomass in other species (alabamensis, purpurea, rosea, pssitacina) as seen by the flatter lines in the figure. For the leucophylla species, one could say that with a chlorophyll level of 410 mg/g, the predicted biomass would be 11.73 g, predicted within a 95% confidence interval of 8.27 g - 16.65 g]. In the code below, you can see the predicted total biomass based on chlorophyll level for all species. 
 
 ```{r}
-model_pred <- ggpredict(full_log, terms = "chlorophyll", back.transform = TRUE)
+chlorophyll_predictions2 <- ggpredict(full_log, terms = c("chlorophyll", "species"), back.transform = TRUE) 
 
-model_pred
+chlorophyll_predictions2
 ```
 
 
 
 
 
-# Works Cited:
+# Works Cited
 
 Ellison, Aaron. and Elizabeth Farnsworth. "Effects of Prey Availability on Sarracenia Physiology at Harvard Forest 2005." Environmental Data Initiative, ver 18, https://doi.org/10.6073/pasta/26b22d09279e62fd729ffc35f9ef0174 (Accessed 2023-06-01).
 
