@@ -250,7 +250,7 @@ plot(ggpredict(full_log, terms = c("chlorophyll", "species"), back.transform = T
 ```
 It is important to note that these results are reported on the scale of the original variable, not the log transformation. With that said, this model says that all else constant, a chlorophyll content of 410 mg/g will result in a predicted biomass of 6.47 g predicted within a confidence interval of 4.95g - 8.45g. This logic can be applied to any chlorophyll content level and the predicted biomass for each level of chlorophyll can be seen below.
 
-https://bianca-berron.github.io/ENVS-193DS_homework-05/code/scratch-paper.html 
+https://bianca-berron.github.io/ENVS-193DS_homework-05/code/scratch.paper.html 
 
 
 

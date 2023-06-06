@@ -16,7 +16,7 @@ execute:
 
 # Introduction
 
-*Sarracenia* are carnivorous pitcher plants that use their pitcher-shaped leaves to catch arthropod prey for nutrition (Milne and Waller 1). Oftentimes, the majority of their diet is made up of spiders, however *Sarracenia* also feed on insects, mites, mollucks, and occcasionally, even small verterbrates (Milne 1). This carnivorous pitcher plant has many uses for humans including treatments for type 2 diabetes and tuberculosis-like symptoms (Huang et al. 1). Therefore, understanding what morphological, physiological, or taxonomic characteristics predict biomass may be useful if these pitcher plants began to be used for medical purposes. Moreover, understanding what factors predict pitcher plant biomass can also be helpful to understand how climate change may affect these plants if certain pitcher plant growth biomass factors are depleted. As a result, this statistical analysis revolves around the question of how *Sarracenia* characteristics predict biomass. We are testing the null hypothesis that *Sarracenia* characteristics do not predict biomass against the alternative hypothesis that *Sarracenia* characteristics do predict biomass.
+*Sarracenia* are carnivorous pitcher plants that use their pitcher-shaped leaves to catch arthropod prey for nutrition (Milne and Waller 1). Oftentimes, the majority of their diet is made up of spiders, however *Sarracenia* also feed on insects, mites, mollucks, and occcasionally, even small verterbrates (Milne 1). This carnivorous pitcher plant has many uses for humans including treatments for type 2 diabetes and tuberculosis-like symptoms (Huang et al. 1). Therefore, understanding what morphological, physiological, or taxonomic characteristics predict biomass may be useful if these pitcher plants began to be used for medical purposes. Moreover, understanding what factors predict pitcher plant biomass can also be helpful to understand how climate change may affect these plants if certain pitcher plant growth biomass factors are depleted. As a result, this statistical analysis revolves around the question of how *Sarracenia* characteristics predict biomass, as well as which characteristics best predict biomass based on their models. We are testing the null hypothesis that *Sarracenia* characteristics do not predict biomass against the alternative hypothesis that *Sarracenia* characteristics do predict biomass.
 
 # Methods
 
@@ -134,7 +134,7 @@ check_normality(full_log)
 check_heteroscedasticity(full_log)
 # assumptions of linear regression are met using log transformation
 ```
-
+**Full Model Diagnostics.** Top left model is a plot of residuals versus fitted values, top right is a normal Q-Q plot, bottom left is a plot of the square root of standardized residuals versus fitted values, and bottom left is a plot of standardized residuals versus leverage.  
 
 In addition to the full and null models, three additional models were created to determine how species and certain physiological characteristics predict biomass. The first additional model created explored how species predicted total biomass because oftentimes, varying species will have different characteristics resulting in differing biomasses. The assumptions (normality and homoscedasticity) were met. 
 
@@ -153,6 +153,8 @@ check_normality(model2_log)
 check_heteroscedasticity(model2_log)
 # variances appear homoscedastic
 ```
+**Species Model Diagnostics.**Top left model is a plot of residuals versus fitted values, top right is a normal Q-Q plot, bottom left is a plot of the square root of standardized residuals versus fitted values, and bottom left is a plot of standardized residuals versus leverage.  
+
 
 The second additional model created explored how chlorophyll affects total biomass. Although the normality assumption was not met, I still chose to use this model as chlorophyll allows plants to undergo photosynthesis, which allows plants to create sugar, promoting plant growth. Therefore, chlorophyll could directly affect a pitcher plant's total biomass. 
 
@@ -171,6 +173,8 @@ check_normality(model3_log)
 check_heteroscedasticity(model3_log)
 # error variance appears homoscedastic
 ```
+**Chlorophyll Model Diagnostics.** Top left model is a plot of residuals versus fitted values, top right is a normal Q-Q plot, bottom left is a plot of the square root of standardized residuals versus fitted values, and bottom left is a plot of standardized residuals versus leverage.  
+
 
 The third model created explored how feedlevel affects total biomass. Once again, although the normality assumption was not met, I still used this model because if a plant has access to more food, then the plant would likely have a larger biomass.
 
@@ -189,6 +193,7 @@ check_normality(model4_log)
 check_heteroscedasticity(model4_log)
 # variance appears homoscedastic
 ```
+**Feedlevel Model Diagnostics.** Top left model is a plot of residuals versus fitted values, top right is a normal Q-Q plot, bottom left is a plot of the square root of standardized residuals versus fitted values, and bottom left is a plot of standardized residuals versus leverage.  
 
 A model comparison between all of these models was created using Akaike's Information Criterion (AIC) values. We looked for the simplest model that explains the most variance, which is essentially a compromise between the complexity of a model and how well a model predicts the response. We compared models using AIC and chose the model with the lowest value, which was full_log.
 
@@ -213,7 +218,7 @@ car::vif(full_log)
 
 # Results
 
-Based on the tests run, we found that the full model including species, feedlevel, sla, chlorophyll, amass, num_lvs, and num_phylls predictors best predicted total biomass of pitcher plants ($F_{15, 87}$ = 38.38, $R^2$ = 0.85, p < 0.001, n = 103, α = 0.05). This model was chosen as it had the lowest AIC value, which means the full model was the simplest model that explained the most variance. 
+Based on the tests run, we found that the full model including species, feedlevel, sla, chlorophyll, amass, num_lvs, and num_phylls predictors best predicted total biomass of pitcher plants ($F_{15, 87}$ = 38.38, $R^2$ = 0.85, p < 0.001, n = 103, α = 0.05). This model was chosen as it had the lowest AIC value, which means the full model was the simplest model that explained the most variance, and both the normality and homoscedasticity assumptions were met. 
 
 ```{r}
 summary(full_log)
